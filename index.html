@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <body>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const url = params.get('url');
+      fetch(url).then(e => e.text()).then(html => {
+        const iframe = document.createElement('iframe');
+        
+        iframe.style = 'border: none; width: 100%; height: 100vh;'
+        document.body.style = 'margin: 0; padding: 0; overflow: hidden';
+           
+        document.head.innerHTML = '';
+        document.body.innerHTML = '';
+        document.body.append(iframe);
+        
+        const contentDoc = iframe.contentWindow.document;
+        contentDoc.open();
+        contentDoc.write(html);
+        contentDoc.close();
+        document.title = (contentDoc.querySelector('title') || {innerText: 'Gist'}).innerText;
+      });
+    </script>
+  </body>
+</html>
