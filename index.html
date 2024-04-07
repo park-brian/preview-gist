@@ -3,6 +3,13 @@
   <body>
     Provide a gist <code>id</code> in the query parameters.
     <script>
+      const params = new URLSearchParams(location.search);
+      const id = params.get('id');
+      const filename = params.get('filename') || 'index.html';
+      if (id) {
+        getGist(id, filename).then(replaceBody);
+      }
+
       async function getGist(id, filename = 'index.html') {
         const url = 'https://api.github.com/gists/' + id;
         const { files } = await fetch(url).then(e => e.json());
@@ -14,12 +21,7 @@
         return 'Gist not found';
       }
 
-      const params = new URLSearchParams(location.search);
-      const id = params.get('id');
-      const filename = params.get('filename') || 'index.html';
-
-      if (id) {
-        getGist(id, filename).then(html => {
+      function replaceBody(html, defaultTitle = 'Gist') {
           const iframe = document.createElement('iframe');
           
           iframe.style = 'border: none; width: 100%; height: 100vh;'
@@ -35,8 +37,7 @@
           contentDoc.close();
 
           const title = contentDoc.querySelector('title');
-          document.title = title ? title.innerText : 'Gist';
-        });
+          document.title = title ? title.innerText : defaultTitle;
       }
     </script>
   </body>
