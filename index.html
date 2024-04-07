@@ -1,25 +1,43 @@
 <!doctype html>
 <html>
   <body>
+    Provide a gist <code>id</code> in the query parameters.
     <script>
+      async function getGist(id, filename = 'index.html') {
+        const url = 'https://api.github.com/gists/' + id;
+        const { files } = await fetch(url).then(e => e.json());
+        for (const item in files) {
+          if (item === filename) {
+            return files[item].content
+          }
+        }
+        return 'Gist not found';
+      }
+
       const params = new URLSearchParams(location.search);
-      const url = params.get('url');
-      fetch(url).then(e => e.text()).then(html => {
-        const iframe = document.createElement('iframe');
-        
-        iframe.style = 'border: none; width: 100%; height: 100vh;'
-        document.body.style = 'margin: 0; padding: 0; overflow: hidden';
-           
-        document.head.innerHTML = '';
-        document.body.innerHTML = '';
-        document.body.append(iframe);
-        
-        const contentDoc = iframe.contentWindow.document;
-        contentDoc.open();
-        contentDoc.write(html);
-        contentDoc.close();
-        document.title = (contentDoc.querySelector('title') || {innerText: 'Gist'}).innerText;
-      });
+      const id = params.get('id');
+      const filename = params.get('filename') || 'index.html';
+
+      if (id) {
+        getGist(id, filename).then(html => {
+          const iframe = document.createElement('iframe');
+          
+          iframe.style = 'border: none; width: 100%; height: 100vh;'
+          document.body.style = 'margin: 0; padding: 0; overflow: hidden';
+             
+          document.head.innerHTML = '';
+          document.body.innerHTML = '';
+          document.body.append(iframe);
+          
+          const contentDoc = iframe.contentWindow.document;
+          contentDoc.open();
+          contentDoc.write(html);
+          contentDoc.close();
+
+          const title = contentDoc.querySelector('title');
+          document.title = title ? title.innerText || 'Gist';
+        })
+      }
     </script>
   </body>
 </html>
