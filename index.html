@@ -35,8 +35,8 @@
           contentDoc.close();
 
           const title = contentDoc.querySelector('title');
-          document.title = title ? title.innerText || 'Gist';
-        })
+          document.title = title ? title.innerText : 'Gist';
+        });
       }
     </script>
   </body>
