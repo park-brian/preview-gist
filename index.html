@@ -1,13 +1,17 @@
 <!doctype html>
 <html>
+  <head>
+    <title>Preview Gists</title>
+  </head>
   <body>
-    Provide a gist <code>id</code> in the query parameters.
     <script>
       const params = new URLSearchParams(location.search);
       const id = params.get('id');
       const filename = params.get('filename') || 'index.html';
       if (id) {
         getGist(id, filename).then(replaceBody);
+      } else {
+        document.body.innerHTML = `Provide a gist <b>id</b> in the query parameters`;
       }
 
       async function getGist(id, filename = 'index.html') {
