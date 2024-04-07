@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title></title>
+    <title>&zwj;</title>
   </head>
   <body>
     <script>
@@ -11,7 +11,8 @@
       if (id) {
         getGist(id, filename).then(replaceBody);
       } else {
-        document.body.innerHTML = `Provide a gist <b>id</b> in the query parameters`;
+        document.body.innerHTML = `Preview gists by providing a gist <b>id</b> in the query parameters`;
+        document.title = 'Preview Gists';
       }
 
       async function getGist(id, filename = 'index.html') {
