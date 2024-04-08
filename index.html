@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>&zwj;</title>
@@ -6,43 +6,43 @@
   <body>
     <script>
       const params = new URLSearchParams(location.search);
-      const id = params.get('id');
-      const filename = params.get('filename') || 'index.html';
+      const id = params.get("id");
+      const filename = params.get("filename") || "index.html";
       if (id) {
         getGist(id, filename).then(replaceBody);
       } else {
-        document.body.innerHTML = `Preview gists by providing a gist <b>id</b> in the query parameters`;
-        document.title = 'Preview Gists';
+        document.title = "Preview Gists";
+        document.body.innerHTML = "Preview gists by providing a gist <b>id</b> in the query parameters";
       }
 
-      async function getGist(id, filename = 'index.html') {
-        const url = 'https://api.github.com/gists/' + id;
-        const { files } = await fetch(url).then(e => e.json());
+      async function getGist(id, filename = "index.html") {
+        const url = "https://api.github.com/gists/" + id;
+        const { files } = await fetch(url).then((e) => e.json());
         for (const item in files) {
           if (item === filename) {
-            return files[item].content
+            return files[item].content;
           }
         }
-        return 'Gist not found';
+        return "Gist not found";
       }
 
-      function replaceBody(html, defaultTitle = 'Gist') {
-          const iframe = document.createElement('iframe');
-          
-          iframe.style = 'border: none; width: 100%; height: 100vh;'
-          document.body.style = 'margin: 0; padding: 0; overflow: hidden';
-             
-          document.head.innerHTML = '';
-          document.body.innerHTML = '';
-          document.body.append(iframe);
-          
-          const contentDoc = iframe.contentWindow.document;
-          contentDoc.open();
-          contentDoc.write(html);
-          contentDoc.close();
+      function replaceBody(html, defaultTitle = "Gist") {
+        const iframe = document.createElement("iframe");
 
-          const title = contentDoc.querySelector('title');
-          document.title = title ? title.innerText : defaultTitle;
+        iframe.style = "border: none; width: 100%; height: 100vh;";
+        document.body.style = "margin: 0; padding: 0; overflow: hidden";
+
+        document.head.innerHTML = "";
+        document.body.innerHTML = "";
+        document.body.append(iframe);
+
+        const contentDoc = iframe.contentWindow.document;
+        contentDoc.open();
+        contentDoc.write(html);
+        contentDoc.close();
+
+        const title = contentDoc.querySelector("title");
+        document.title = title ? title.innerText : defaultTitle;
       }
     </script>
   </body>
